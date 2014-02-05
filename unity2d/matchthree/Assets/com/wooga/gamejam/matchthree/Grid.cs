@@ -19,7 +19,7 @@ public class Grid : MonoBehaviour {
 				tile.renderer.material = mat;
 				tile.transform.localPosition = new Vector2(x, y);
 				tile.transform.parent = transform;
-				tile.tag = tagId;
+				tile.name = "tile_" + tagId;
 				++tagId;
 			}
 		};
