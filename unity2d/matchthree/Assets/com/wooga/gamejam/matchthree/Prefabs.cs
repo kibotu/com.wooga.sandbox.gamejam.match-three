@@ -3,21 +3,10 @@ using System.Collections;
 
 public class Prefabs : MonoBehaviour {
 
-	public GameObject Yellow;
-	public GameObject Red;
-	public GameObject Blue;
-	public GameObject Green;
-	public GameObject White;
-	public GameObject Purple;
-
-	private GameObject[] availableColors;
+	public GameObject[] availableColors;
 
 	public void Start()
 	{
-		availableColors = new GameObject[] {
-			Yellow, Red, Blue, Green, White, Purple
-		};
-
 		Instance = this;
 	}
 	
