@@ -16,26 +16,20 @@ public class Grid : MonoBehaviour {
 
 		grid = new Piece[columns,rows];
 
-		int r = 0;
-		int c = 0;
-		float y = 0;
-		float x = 0;
-		for(y = 0; y < rows; y+=1+spacing) {
-			for (x = 0; x < columns; x+=1+spacing) {
+		//nt r = 0;
+		//int c = 0;
+		for(int y = 0; y < rows; ++y) {
+			for (int x = 0; x < columns; ++x) {
 
 				// piece knows its location
-				var piece = Prefabs.CreateRandomPiece (c,r);
+				var piece = Prefabs.CreateRandomPiece (x,y);
 
 				// position within scene
-				piece.gameObject.transform.localPosition = new Vector2(x, y);
 				piece.gameObject.transform.parent = transform;
 
 				// position within grid
-				grid[c,r] = piece;
-				++c;
+				grid[x,y] = piece;
 			}
-			c = 0;
-			++r;
 		};
 	}
 
@@ -47,30 +41,38 @@ public class Grid : MonoBehaviour {
 		return  x >= 0 && x < columns && y >= 0 && y < rows;
 	}
 
-	public void dropRows() {
-		dropRow (0);
+	public void dropRows(List<int> cols) {
+		foreach(int c in cols) 
+			dropRow (c);	
 	}
 
 	private void dropRow(int column) {
 
-		Debug.Log ("dropping");
-
 		// figure out lowest empty cell in a row
 		int emptyCell;
+		int count = 0;
 		while((emptyCell = findEmptyRowCell(column)) != -1) {
-			Debug.Log ("Empty cell detected at [" + column + "," + emptyCell + "]");
+			//Debug.Log ("Empty cell detected at [" + column + "," + emptyCell + "]");
+
+			for(int y = emptyCell; y < rows; ++y) {
+				Piece current = grid[column, y];
+				if(current == null) continue;
+				moveDownByOneY(column,y);
+			}
 			if(emptyCell == (rows - 1)) 
 			{
-				Debug.Log ("Spawning Color at top [" + column + "," + emptyCell + "]");
-				grid[column, emptyCell] = Prefabs.CreateRandomPiece(column, emptyCell);
+				// spawn new one on top
+				Piece spawn = Prefabs.CreateRandomPiece(column, emptyCell);
+				grid[column, emptyCell] = spawn;
+				//Debug.Log ("spawn at " + emptyCell);
 			} else {
-				for(int y = emptyCell; y < rows; ++y) {
-					Piece current = grid[column, y];
-					if(current == null) continue;
-					moveDownByOneY(column,y);
-				}
+				
+				//Debug.Log ("drop at " + emptyCell);
+				++count;
 			}
 		}
+
+		if (count > 0) Debug.Log ("Dropped " + count + " Pieces down.");
 	}
 
 	public int findEmptyColumnCell(int row) {
@@ -86,19 +88,21 @@ public class Grid : MonoBehaviour {
 		for(int y = rows - 1; y >= 0; --y) {
 			if(grid[column,y] == null) {
 				return y;
-			}
+			} 
 		}
 		return -1;
 	}
 
+	public void SetPieceAt(Piece piece, int x, int y) {
+		// Debug.Log ("Setting " + (piece == null ? "null" : piece.name) +  " at " + "[" + x + "," + y + "]");
+		grid[x,y] = piece;
+	}
+
 	public void moveDownByOneY(int x, int y) {
 
-		Debug.Log ("Dropping down from [" + x + "," + y + "] to [" + x + "," + (y-1) + "]");
+		//Debug.Log ("Dropping down from [" + x + "," + y + "] to [" + x + "," + (y-1) + "]");
 
 		Piece current = grid [x, y];
-
-		// displayed position
-		current.transform.position = new Vector3(current.transform.position.x, y  * (1 + spacing) - (1 + spacing) , 0);
 
 		// within grid
 		if (y > 0) {
@@ -106,9 +110,16 @@ public class Grid : MonoBehaviour {
 				Debug.Log ("Can't drop down one tile, somethin's there");
 				return;
 			}
+			// within grid
 			grid[x, y - 1] = current;
 			grid[x, y] = null;
-			Debug.Log("Changing grid from [" + x + "," + y + "] to [" + x + "," + (y-1) + "]");
+
+			// displayed position
+			current.transform.position = new Vector3(current.transform.position.x, y  * (1 + spacing) - (1 + spacing) , 0);
+
+			// piece itself
+			current.y -= 1;
+			//Debug.Log("Changing grid from [" + x + "," + y + "] to [" + x + "," + (y-1) + "]");
 		}
 	}
 

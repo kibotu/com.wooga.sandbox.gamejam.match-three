@@ -13,7 +13,7 @@ public class Board : MonoBehaviour {
 		grid = gameObject.AddComponent<Grid> ();
 		grid.CreateGrid (rows, columns);
 
-		startPiece = Prefabs.CreateRandomPiece ();
+		startPiece = Prefabs.CreateRandomPiece (0,0);
 		startPiece.gameObject.AddComponent<DragDrop> ();
 	}
 }

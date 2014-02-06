@@ -69,6 +69,7 @@ public class DragDrop : MonoBehaviour {
 
 		piece.SwapPosition (closestPiece); // not needed currently
 
+
 		//Debug.Log (closestTile.GetComponent<TileMetaData>().index);
 
 		// 3) find matching tiles
@@ -76,19 +77,28 @@ public class DragDrop : MonoBehaviour {
 		List<Piece> matches = floodFill.FillFromPiece(gameObject.GetComponent<Piece>(), grid);
 		// gameObject.AddComponent<ExplodeNeighbours> ().Neighbours = Neighbours;
 
+	
+
 		// 4) make some fancy explosions
-		Debug.Log ("Amount matches: " + matches.Count);
 		if (matches.Count > 2) {
+
+			List<int> cols = new List<int>();
+
+			Debug.Log ("Desotryed " + matches.Count + " Pieces");
 			foreach (Piece match in matches) {
+
 				// match.AddComponent<Explode>();
 
-				grid.grid[piece.x,piece.y] = null;
+				grid.SetPieceAt(null, match.x, match.y);
+
+				if(!cols.Contains(match.x))
+				   cols.Add(match.x);
 
 				Destroy (match.gameObject);
 			}
+
+			grid.dropRows(cols);
 		}
-		
-		//grid.dropRows();
 
 		// remove dragging script from old tile
 		Destroy (this);

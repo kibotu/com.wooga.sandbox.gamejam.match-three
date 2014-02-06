@@ -12,7 +12,7 @@ public class FloodFill
 		_floodFill = new List<Piece>();
         _floodFill.Add(piece);
 
-		//Debug.Log("Find Neighbours to [" + pieceMeta.x + "," + pieceMeta.y + "] " + pieceMeta.type + " " + pieceMeta.name);
+		//Debug.Log("Find Neighbours to [" + piece.x + "," + piece.y + "] " + piece.type + " " + piece.name);
 		
         _board = board;
         FloodFillRecursively(piece);
@@ -21,17 +21,17 @@ public class FloodFill
 
     void FloodFillRecursively(Piece piece)
     {
-		//Debug.Log ("Checking " + piece.name + " " + pieceMeta.ToString());
+		//Debug.Log ("Checking [" + piece.x + "," + piece.y + "] " + piece.type + " " + piece.name);
 
 		foreach(Vector2 coordinate in SurroundingCoordinates(piece.x, piece.y))
         {
             if (_board.CellAtXY(coordinate) != null)
             {
 				Piece nextPiece = _board.CellAtXY(coordinate);
-			//	Debug.Log("Neighbours has same type ? [" + nextPieceMeta.x + "," + nextPieceMeta.y + "] " + nextPieceMeta.type + " " + nextPieceMeta.name);
+				//Debug.Log("Neighbours has same type ? [" + nextPiece.x + "," + nextPiece.y + "] " + nextPiece.type + " " + nextPiece.name);
 				if (piece.type == nextPiece.type && !_floodFill.Contains(nextPiece))
                 {
-				//	Debug.Log ("Adding this");
+					//Debug.Log ("Adding this");
                     _floodFill.Add(nextPiece);
                     FloodFillRecursively(nextPiece);
                 }

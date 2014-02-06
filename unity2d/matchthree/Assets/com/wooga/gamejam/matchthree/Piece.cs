@@ -13,11 +13,18 @@ public class Piece : MonoBehaviour {
 		other.x = tmp;
 
 		tmp = y;
-		x = other.y;
+		y = other.y;
 		other.y = tmp;
+
 		
 		Vector3 t = gameObject.transform.position;
 		gameObject.transform.position = other.gameObject.transform.position;
 		other.gameObject.transform.position = t;
+
+		GameObject.Find ("Board").GetComponent<Grid>().SetPieceAt(this,x,y);
+	}
+
+	public string ToString() {
+		return name + " [" + x + "," + y + "]";
 	}
 }
