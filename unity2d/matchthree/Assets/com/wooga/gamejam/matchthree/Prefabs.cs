@@ -17,8 +17,11 @@ public class Prefabs : MonoBehaviour {
 		return (GameObject) Instantiate(type); //, new Vector3(0, 0, 0), Quaternion.identity); 
 	}
 
-	public static GameObject CreateRandomColor() {
-
-		return CreateGameObject(Instance.availableColors[Random.Range (0, Instance.availableColors.Length)]);
+	public static GameObject CreateRandomColor()
+	{
+	    int random = Random.Range(0, Instance.availableColors.Length);
+		GameObject color = CreateGameObject(Instance.availableColors[random]);
+	    color.GetComponent<TileMetaData>().type = random;
+	    return color;
 	}
 }

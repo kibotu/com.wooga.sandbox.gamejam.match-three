@@ -8,8 +8,9 @@ public class DragDrop : MonoBehaviour {
 	public Grid grid;
 	private List<GameObject> selectedTiles;
 	public float zIndex = -0.001f;
-	public Color highLightColor = new Color (0.3f,0.3f,0.3f);
-	public Vector3 StartPosition = new Vector3(0,-6,0);
+	public Color highLightColor = new Color (0.2f,0.2f,0.2f);
+    public Vector3 StartPosition = new Vector3(0, -6, 0);
+    public List<GameObject> Neighbours;
 
 	void Start () {
 		//gameObject.AddComponent<DragRecognizer> ().OnGesture += OnDragDrop;
@@ -17,6 +18,8 @@ public class DragDrop : MonoBehaviour {
 		selectedTiles = new List<GameObject> ();
 
 		transform.position = StartPosition;
+
+        Neighbours = new List<GameObject>();
 	}
 	
 	void Update () {
@@ -57,7 +60,7 @@ public class DragDrop : MonoBehaviour {
 		//Debug.Log (closestTile.GetComponent<TileMetaData>().index);
 
 		// 3) find matching tiles
- 		gameObject.AddComponent<ExplodeNeighbours> ();
+ 		gameObject.AddComponent<ExplodeNeighbours> ().Neighbours = Neighbours;
 
 
 		// 4) make some fancy explosions
@@ -73,7 +76,7 @@ public class DragDrop : MonoBehaviour {
 	}
 
 	public void OnCollisionExit(Collision collision) {
-	//	collision.gameObject.renderer.material.color -= highLightColor;
+		//collision.gameObject.renderer.material.color -= highLightColor;
 		selectedTiles.Remove (collision.gameObject);
 	}
 
