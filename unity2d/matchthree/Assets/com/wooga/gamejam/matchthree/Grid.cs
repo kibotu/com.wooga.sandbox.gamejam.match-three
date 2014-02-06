@@ -8,7 +8,10 @@ public class Grid : MonoBehaviour {
 	public float spacing = 0.1f;
 	public GameObject[,] grid;
 
-	public void CreateGrid (int columns, int rows, float spacing = 0.1f) {
+	public void CreateGrid (int rows, int columns, float spacing = 0.1f) {
+
+		this.rows = rows;
+		this.columns = columns;
 
 		grid = new GameObject[rows, columns];
 
@@ -29,19 +32,7 @@ public class Grid : MonoBehaviour {
 	}
 
 	public GameObject CellAtXY(Vector2 c) {
-
-		if (c.x < 0)
-						return null;
-		if (c.y < 0)
-						return null;
-		if (c.x > rows)
-						return null;
-		if (c.y > rows)
-						return null;
-
-		Debug.Log ("within bounds");
-
-		return grid[(int)c.x,(int)c.y];
+		return c.x < 0 || c.x >= rows || c.y < 0 || c.y >= columns ? null : grid[(int)c.x,(int)c.y];
 	}
 
 	public void movePieceFromTo(int sx, int sy, int tx, int ty) {

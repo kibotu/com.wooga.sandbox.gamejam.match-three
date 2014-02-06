@@ -27,9 +27,6 @@ public class FloodFill
 
 		foreach(Vector2 coordinate in SurroundingCoordinates(pieceMeta.x, pieceMeta.y))
         {
-
-			Debug.Log ("coords: " + coordinate + " exist in grid? " + _board.CellAtXY(coordinate) == null);
-
             if (_board.CellAtXY(coordinate) != null)
             {
 				GameObject nextPiece = _board.CellAtXY(coordinate);

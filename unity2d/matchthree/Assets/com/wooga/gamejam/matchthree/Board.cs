@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Board : MonoBehaviour {
 
-	public int rows = 4;
-	public int columns = 4;
+	public int rows = 7;
+	public int columns = 9;
 	private Grid grid;
 	public GameObject StartTile;
 
