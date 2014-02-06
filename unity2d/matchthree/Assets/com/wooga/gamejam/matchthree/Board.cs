@@ -3,25 +3,17 @@ using System.Collections;
 
 public class Board : MonoBehaviour {
 
-	public int rows = 7;
-	public int columns = 9;
+	public int rows = 9;
+	public int columns = 7;
 	private Grid grid;
-	public GameObject StartTile;
+	public Piece startPiece;
 
 	void Start () {
 		//coloredGrid.AddComponent<RotateTowardsMouse> ().enabled = false;
 		grid = gameObject.AddComponent<Grid> ();
 		grid.CreateGrid (rows, columns);
 
-		AddStartTile ();
-	}
-
-	void AddStartTile() {
-		StartTile = Prefabs.CreateRandomColor ();
-		StartTile.AddComponent<DragDrop> ();
-	}
-	
-	void Update () {
-	
+		startPiece = Prefabs.CreateRandomPiece ();
+		startPiece.gameObject.AddComponent<DragDrop> ();
 	}
 }

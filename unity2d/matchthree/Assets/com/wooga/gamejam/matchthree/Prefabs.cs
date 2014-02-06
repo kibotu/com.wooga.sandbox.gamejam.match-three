@@ -17,11 +17,14 @@ public class Prefabs : MonoBehaviour {
 		return (GameObject) Instantiate(type); //, new Vector3(0, 0, 0), Quaternion.identity); 
 	}
 
-	public static GameObject CreateRandomColor()
+	public static Piece CreateRandomPiece(int x = 0, int y = 0)
 	{
-	    int random = Random.Range(0, Instance.availableColors.Length);
-		GameObject color = CreateGameObject(Instance.availableColors[random]);
-	    color.GetComponent<TileMetaData>().type = random;
-	    return color;
+		var randomType = Random.Range(0, Instance.availableColors.Length);
+		GameObject go = CreateGameObject (Instance.availableColors [randomType]);
+		Piece piece = go.AddComponent<Piece> ();
+		piece.x = x;
+		piece.y = y;
+		piece.type = randomType;
+		return piece;
 	}
 }
