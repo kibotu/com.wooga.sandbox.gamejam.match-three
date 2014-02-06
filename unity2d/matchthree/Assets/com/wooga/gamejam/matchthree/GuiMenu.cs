@@ -15,8 +15,8 @@ public class GuiMenu : MonoBehaviour {
 
 	void OnGUI() {
 		if(GUI.Button(new Rect(Screen.width/2 - btnWidth/2,Screen.height / 2 -btnHeight/2 + btnHeight * 2,btnWidth,btnHeight), "Start Game")) {
-			var level = new GameObject("Grid");
-			level.AddComponent<Level>();
+			var board = new GameObject("Board");
+			board.AddComponent<Board>();
 			Destroy(gameObject);
 		}
 	}
