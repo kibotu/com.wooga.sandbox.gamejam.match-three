@@ -70,7 +70,7 @@ public class Grid : MonoBehaviour {
 			}
 		}
 
-		if (count > 0) Debug.Log ("Dropped " + count + " Pieces down.");
+		//if (count > 0) Debug.Log ("Dropped " + count + " Pieces down.");
 	}
 
 	public int findEmptyColumnCell(int row) {

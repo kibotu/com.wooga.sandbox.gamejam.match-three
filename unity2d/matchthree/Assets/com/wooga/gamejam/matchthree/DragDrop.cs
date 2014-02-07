@@ -8,7 +8,7 @@ public class DragDrop : MonoBehaviour {
 	public Grid grid;
 	private List<GameObject> selectedTiles;
 	public Color highLightColor = new Color (0.2f,0.2f,0.2f);
-    public Vector3 StartPosition = new Vector3(3.5f, -1.8f, -0.1f);
+    public Vector3 StartPosition = new Vector3(3.3f, -2f, -0.1f);
 	private Piece piece;
 
 	void Start () {
@@ -40,9 +40,21 @@ public class DragDrop : MonoBehaviour {
 	{
 	    grid.ResetColor();
 
+		if (Scoring.moveLimit <= Scoring.actualMoves) {
+
+			Stars stars = GameObject.Find ("Stars").GetComponent<Stars>();
+
+			// one more stars => win screen
+			// less than one star => losing screen
+			Application.LoadLevel(stars.oneStar.isEnabled() ? (int)Prefabs.Scene.winscreen : (int)Prefabs.Scene.losingscreen);
+		}
+
 		// 0) something selected?
-		if (selectedTiles.Count < 1)
+		if (selectedTiles.Count < 1) {
+			moveToStartPosition();
 			return;
+		}
+			
 
 		// 1) find closest tile
         Piece closestPiece = FindNearestTile();
@@ -65,6 +77,11 @@ public class DragDrop : MonoBehaviour {
 
 		piece.SwapPosition (closestPiece); // not needed currently
 
+		// move limit
+		Scoring.actualMoves++;
+
+		// update moves label
+		GameObject.Find ("Moves").guiText.text = ""+(Scoring.moveLimit +1 - Scoring.actualMoves);
 
 		//Debug.Log (closestTile.GetComponent<TileMetaData>().index);
 
@@ -78,6 +95,23 @@ public class DragDrop : MonoBehaviour {
 		// 4) make some fancy explosions
 		if (matches.Count > 2) {
 
+			int bonusValue;
+			if(matches.Count >= Scoring.mediumGroupSize && matches.Count < Scoring.bigGroupSize)
+			{
+				bonusValue = Scoring.mediumBonus;
+			}else if(matches.Count >= Scoring.bigGroupSize)
+			{
+				bonusValue = Scoring.bigBonus;
+			}else
+			{
+				bonusValue = 1;
+			}
+			
+			Scoring.setFinalScore(Scoring.finalScore + (Scoring.pieceValue * matches.Count * bonusValue));
+			Debug.Log("Score earned for the match: " + Scoring.finalScore);
+			Debug.Log("Final Score: " + Scoring.finalScore);
+
+
 			List<int> cols = new List<int>();
 
 			Debug.Log ("Desotryed " + matches.Count + " Pieces");
@@ -89,6 +123,7 @@ public class DragDrop : MonoBehaviour {
 
 				if(!cols.Contains(match.x))
 				   cols.Add(match.x);
+
 
 				Destroy (match.gameObject);
 			}

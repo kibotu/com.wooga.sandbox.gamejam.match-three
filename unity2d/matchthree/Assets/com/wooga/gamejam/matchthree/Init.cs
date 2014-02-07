@@ -3,13 +3,17 @@ using System.Collections;
 
 public class Init : MonoBehaviour {
 
-	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		var board = new GameObject("Board");
+		board.AddComponent<Board>();
+		Destroy(gameObject);
+
+		// reset score, stars and moves
+		Scoring.actualMoves = 1;
+		Scoring.finalScore = 0;
+		
+		GameObject.Find ("Score").guiText.text = "0";
+		GameObject.Find ("Moves").guiText.text = ""+Scoring.moveLimit;
+		GameObject.Find ("Objectives").guiText.text = ""+ GameObject.Find ("Stars").GetComponent<Stars> ().threeStarValue;
 	}
 }

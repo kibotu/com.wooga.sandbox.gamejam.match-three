@@ -3,10 +3,14 @@ using System.Collections;
 
 public class Prefabs : MonoBehaviour {
 
+	public enum Scene { mainmenu, game, winscreen, losingscreen };
+
 	public GameObject[] availableColors;
 	private static Grid grid;
+	public GameObject Star;
+	public GameObject Label;
 
-	public void Start()
+	public void Awake()
 	{
 		Instance = this;
 	}
@@ -32,5 +36,13 @@ public class Prefabs : MonoBehaviour {
 		piece.type = randomType;
 		piece.transform.position = new Vector3(x * (1 + grid.spacing), y * (1 + grid.spacing), 0);
 		return piece;
+	}
+
+	public static GameObject CreateNewStar() {
+		return CreateGameObject(Instance.Star);
+	}
+	
+	public static GameObject CreateLabel() {
+		return CreateGameObject(Instance.Label);
 	}
 }
