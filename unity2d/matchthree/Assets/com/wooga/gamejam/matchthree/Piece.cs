@@ -6,6 +6,12 @@ public class Piece : MonoBehaviour {
 	public int x;
 	public int y;
 	public int type;
+    public Color color;
+
+    void Start()
+    {
+        color = renderer.material.color;
+    }
 
 	public void SwapPosition(Piece other) {
 		int tmp = x;

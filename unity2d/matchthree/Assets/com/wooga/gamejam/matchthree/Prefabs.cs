@@ -25,6 +25,7 @@ public class Prefabs : MonoBehaviour {
 
 		var randomType = Random.Range(0, Instance.availableColors.Length);
 		GameObject go = CreateGameObject (Instance.availableColors [randomType]);
+	    go.transform.parent = grid.transform;
 		Piece piece = go.AddComponent<Piece> ();
 		piece.x = x;
 		piece.y = y;

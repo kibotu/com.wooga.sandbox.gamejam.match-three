@@ -16,8 +16,6 @@ public class Grid : MonoBehaviour {
 
 		grid = new Piece[columns,rows];
 
-		//nt r = 0;
-		//int c = 0;
 		for(int y = 0; y < rows; ++y) {
 			for (int x = 0; x < columns; ++x) {
 
@@ -136,4 +134,16 @@ public class Grid : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void ResetColor()
+    {
+
+        for (int y = 0; y < rows; ++y)
+        {
+            for (int x = 0; x < columns; ++x)
+            {
+                grid[x, y].renderer.material.color = grid[x, y].color;
+            }
+        }
+    }
 }

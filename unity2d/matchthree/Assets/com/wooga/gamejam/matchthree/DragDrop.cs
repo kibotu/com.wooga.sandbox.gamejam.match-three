@@ -8,7 +8,7 @@ public class DragDrop : MonoBehaviour {
 	public Grid grid;
 	private List<GameObject> selectedTiles;
 	public Color highLightColor = new Color (0.2f,0.2f,0.2f);
-    public Vector3 StartPosition = new Vector3(3.5f, -1.8f, -1f);
+    public Vector3 StartPosition = new Vector3(3.5f, -1.8f, -0.1f);
 	private Piece piece;
 
 	void Start () {
@@ -20,10 +20,6 @@ public class DragDrop : MonoBehaviour {
 	
 	void moveToStartPosition() {
 		transform.position = StartPosition;
-	}
-	
-	void Update () {
-
 	}
 
 	void OnDragDrop(DragGesture gesture) {
@@ -40,14 +36,16 @@ public class DragDrop : MonoBehaviour {
 		gameObject.transform.position = new Vector3(point.x,point.y,StartPosition.z);
 	}
 
-	public void OnMouseUp() {
+	public void OnMouseUp()
+	{
+	    grid.ResetColor();
 
 		// 0) something selected?
 		if (selectedTiles.Count < 1)
 			return;
 
 		// 1) find closest tile
-		Piece closestPiece = FindNearestTile ();
+        Piece closestPiece = FindNearestTile();
 
 		// can't drop same color on same tile
 		if (piece.type == closestPiece.type) {
@@ -57,8 +55,6 @@ public class DragDrop : MonoBehaviour {
 		}
 
 		//Debug.Log ("doing some floodflill");
-			
-	//	closestTile.renderer.material.color -= highLightColor;
 
 		// 2) swap with playerTile and set it towards start position (maybe some transition?)
 		// 2.1) set player controlled tile to grid tile
@@ -105,23 +101,37 @@ public class DragDrop : MonoBehaviour {
 	}
 
 	public void OnCollisionEnter(Collision collision) {
-		//collision.gameObject.renderer.material.color += highLightColor;
-		if (!selectedTiles.Contains (collision.gameObject))
-			selectedTiles.Add (collision.gameObject);
+	    foreach (var c in collision.contacts)
+	    {
+            if (!selectedTiles.Contains(c.otherCollider.gameObject))
+            {
+                selectedTiles.Add(c.otherCollider.gameObject);
+                c.otherCollider.gameObject.renderer.material.color += highLightColor;
+            }
+	    }
 	}
 
 	public void OnCollisionExit(Collision collision) {
-		//collision.gameObject.renderer.material.color -= highLightColor;
-		selectedTiles.Remove (collision.gameObject);
+
+        foreach (var c in collision.contacts)
+        {
+            if (selectedTiles.Contains(c.otherCollider.gameObject))
+            {
+                selectedTiles.Remove(c.otherCollider.gameObject);
+                c.otherCollider.gameObject.renderer.material.color = c.otherCollider.gameObject.GetComponent<Piece>().color;
+            }
+        }
 	}
 
 	private Piece FindNearestTile() {
 		GameObject closest = selectedTiles[0];
 		float smallestDistance = Vector3.Distance(transform.position, closest.transform.position);
-		for(int i = 1; i < selectedTiles.Count; ++i) {
+		for(int i = 1; i < selectedTiles.Count; ++i)
+		{
 			float dis = Vector3.Distance(transform.position, selectedTiles[i].transform.position);
 			if(smallestDistance >= dis) {
 				closest = selectedTiles[i];
+			    smallestDistance = dis;
 			}
 		}
 		return closest.GetComponent<Piece>();
