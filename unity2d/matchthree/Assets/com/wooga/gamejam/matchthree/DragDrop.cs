@@ -124,10 +124,9 @@ public class DragDrop : MonoBehaviour {
 				if(!cols.Contains(match.x))
 				   cols.Add(match.x);
 
+				StartCoroutine(explosion(match));
 
-				var pos = match.transform.position;
-				pos.z = -2;
-				Prefabs.CreateExplosion().transform.position = pos;
+
 				Destroy (match.gameObject);
 			}
 
@@ -137,6 +136,36 @@ public class DragDrop : MonoBehaviour {
 		// remove dragging script from old tile
 		Destroy (this);
 	}
+
+	IEnumerator explosion(Piece match) {
+		
+		Vector3 pos = match.transform.position;
+		pos.z = -2f;
+		GameObject expl = Prefabs.CreateExplosion(); 
+		expl.transform.position = pos;
+		
+		// particle match destroyed pieces
+		// expl.renderer.material.SetColor( "_TintColor", match.color);
+		expl.renderer.material.SetColor( "_TintColor", DragDrop.getColor(match.type));
+		yield return this;
+	}
+	
+	public static Color getColor(int type) {
+
+		Color color = Color.white;
+
+		switch (type) {
+		case 0: color = Color.blue; break;
+		case 1: color = Color.green; break;
+		case 2: color = new Color(180,20,160); break; // purple 
+		case 3: color = Color.red; break;
+		case 4: color = Color.white; break;
+		case 5: color = Color.yellow; break;
+		}
+
+		return color;
+
+	} 
 
 	public void OnCollisionEnter(Collision collision) {
 	    foreach (var c in collision.contacts)
