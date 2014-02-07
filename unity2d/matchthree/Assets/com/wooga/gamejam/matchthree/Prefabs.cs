@@ -9,6 +9,7 @@ public class Prefabs : MonoBehaviour {
 	private static Grid grid;
 	public GameObject Star;
 	public GameObject Label;
+	public GameObject Explosion;
 
 	public void Awake()
 	{
@@ -44,5 +45,9 @@ public class Prefabs : MonoBehaviour {
 	
 	public static GameObject CreateLabel() {
 		return CreateGameObject(Instance.Label);
+	}
+
+	public static GameObject CreateExplosion() {
+		return CreateGameObject(Instance.Explosion);
 	}
 }

@@ -125,6 +125,9 @@ public class DragDrop : MonoBehaviour {
 				   cols.Add(match.x);
 
 
+				var pos = match.transform.position;
+				pos.z = -2;
+				Prefabs.CreateExplosion().transform.position = pos;
 				Destroy (match.gameObject);
 			}
 
