@@ -36,6 +36,9 @@ public class Prefabs : MonoBehaviour {
 		piece.y = y;
 		piece.type = randomType;
 		piece.transform.position = new Vector3(x * (1 + grid.spacing), y * (1 + grid.spacing), 0);
+
+		piece.GetComponent<PianoKeyScript> ().semitone_offset = randomType;
+
 		return piece;
 	}
 
